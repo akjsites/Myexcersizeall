@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="li" class="com.example.demo.list">
+    <property name="name">
+    <map>
+    <entry><key>A</key><value>Amit</value></entry>
+    <entry><key>B</key><value>Asw</value></entry>
+    <entry><key>A</key><value>Amit</value></entry>
+    
+   
+    
+    
+    </map>
+    </property>
+    </bean>
+
+</beans>
