@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank Pro - Banking Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2d3e50;
+            --secondary: #3498db;
+            --accent: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 40px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info i {
+            color: var(--accent);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        .online .status-indicator {
+            background-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .offline .status-indicator {
+            background-color: var(--danger);
+            box-shadow: 0 0 10px var(--danger);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .last-update {
+            color: var(--gray);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+            transform: translateY(-2px);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 34px;
+            transition: .4s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Form Styles */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .card-header i {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            background: rgba(52, 152, 219, 0.1);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            height: 52px;
+        }
+
+        .btn-submit:hover {
+            background: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        thead th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.002);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        tbody td {
+            padding: 20px 15px;
+            font-size: 0.95rem;
+        }
+
+        .account-id {
+            font-weight: 600;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .account-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .balance {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .positive {
+            color: var(--accent);
+        }
+
+        .transaction-input {
+            width: 120px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .transaction-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-action {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+
+        .btn-deposit {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-deposit:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-withdraw {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-withdraw:hover {
+            background: var(--danger);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .last-updated-cell {
+            color: var(--gray);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Summary Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.accounts {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-icon.balance {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stat-icon.transactions {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stat-icon.users {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .form-group {
+                flex-direction: column;
+            }
+            
+            .input-group {
+                min-width: 100%;
+            }
+            
+            thead {
+                display: none;
+            }
+            
+            tbody tr {
+                display: block;
+                margin-bottom: 20px;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 15px;
+            }
+            
+            tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            
+            tbody td:last-child {
+                border-bottom: none;
+            }
+            
+            tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--primary);
+                text-transform: uppercase;
+                font-size: 0.8rem;
+            }
+            
+            .transaction-cell {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .transaction-cell::before {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+            
+            .btn-submit {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(52, 152, 219, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--secondary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        .notification.success {
+            background: var(--accent);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.info {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                <div>
+                    <h1>SecureBank Pro</h1>
+                    <p>Real-Time Banking Dashboard</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin Dashboard</span>
+            </div>
+        </header>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="connection-status online">
+                <span class="status-indicator"></span>
+                <span>System Online</span>
+            </div>
+            <div class="last-update">
+                <i class="far fa-clock"></i>
+                <span>Last update: <span id="lastUpdate">Just now</span></span>
+            </div>
+            <div class="controls">
+                <button class="btn btn-primary" onclick="manualRefresh()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh Now
+                </button>
+                <div class="toggle-container">
+                    <span>Auto Refresh</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoRefresh" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="stats-container">
+            <div class="stat-card fade-in">
+                <div class="stat-icon accounts">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalAccounts">0</h3>
+                    <p>Total Accounts</p>
+                </div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon balance">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalBalance">$0.00</h3>
+                    <p>Total Balance</p>
+                </div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon transactions">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalTransactions">0</h3>
+                    <p>Today's Transactions</p>
+                </div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon users">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>24/7</h3>
+                    <p>Service Available</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Account Form -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <i class="fas fa-plus-circle"></i>
+                <h2>Create New Account</h2>
+            </div>
+            <form id="createForm">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label for="name"><i class="fas fa-user"></i> Account Holder Name</label>
+                        <input type="text" id="name" placeholder="Enter full name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="balance"><i class="fas fa-dollar-sign"></i> Initial Deposit</label>
+                        <input type="number" id="balance" min="0" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Accounts Table -->
+        <div class="table-container fade-in">
+            <div class="card-header" style="border-bottom: none; margin-bottom: 0; padding: 25px 25px 0;">
+                <i class="fas fa-list-alt"></i>
+                <h2>Account Management</h2>
+            </div>
+            <table id="accountsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Account Holder</th>
+                        <th>Current Balance</th>
+                        <th>Deposit Funds</th>
+                        <th>Withdraw Funds</th>
+                        <th>Last Activity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Accounts will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2023 SecureBank Pro. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">
+                <i class="fas fa-shield-alt"></i> Secured with 256-bit SSL Encryption
+            </p>
+        </footer>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script>
+        const apiUrl = "http://172.16.0.135:8080/api/accounts";
+        let refreshInterval;
+        let accountsCache = [];
+        let isOnline = true;
+        let transactionCount = 0;
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        // Update stats
+        function updateStats(accounts) {
+            document.getElementById('totalAccounts').textContent = accounts.length;
+            
+            const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+            document.getElementById('totalBalance').textContent = `$${totalBalance.toFixed(2)}`;
+            
+            // Simulate transaction count (in real app, this would come from API)
+            document.getElementById('totalTransactions').textContent = transactionCount;
+        }
+
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = timeString;
+        }
+
+        // Update connection status
+        function updateConnectionStatus(online) {
+            isOnline = online;
+            const statusElement = document.querySelector('.connection-status');
+            const statusText = statusElement.querySelector('span:last-child');
+            
+            if (online) {
+                statusElement.className = 'connection-status online';
+                statusText.textContent = 'System Online';
+                showNotification('Connection restored', 'success');
+            } else {
+                statusElement.className = 'connection-status offline';
+                statusText.textContent = 'Connection Lost - Retrying...';
+                showNotification('Connection lost. Attempting to reconnect...', 'error');
+            }
+        }
+
+        // Fetch and render accounts
+        async function fetchAccounts() {
+            try {
+                const res = await fetch(apiUrl);
+                if (!res.ok) throw new Error('Network error');
+                
+                const accounts = await res.json();
+                
+                // Check if data changed
+                const accountsChanged = JSON.stringify(accounts) !== JSON.stringify(accountsCache);
+                
+                if (accountsChanged) {
+                    accountsCache = accounts;
+                    renderAccounts(accounts);
+                    updateStats(accounts);
+                    updateTimestamp();
+                    
+                    if (!isOnline) {
+                        updateConnectionStatus(true);
+                    }
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error fetching accounts:', error);
+                updateConnectionStatus(false);
+                return false;
+            }
+        }
+
+        // Render accounts table
+        function renderAccounts(accounts) {
+            const tbody = document.querySelector('#accountsTable tbody');
+            tbody.innerHTML = '';
+            
+            if (accounts.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--gray);">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px; display: block;"></i>
+                            <h3>No Accounts Found</h3>
+                            <p>Create your first account to get started</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            accounts.forEach(acc => {
+                const row = document.createElement('tr');
+                row.className = 'fade-in';
+                
+                // Format last activity time
+                const now = new Date();
+                const activityTime = new Date(now.getTime() - Math.random() * 86400000); // Random time in last 24h
+                const timeString = activityTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const dateString = activityTime.toLocaleDateString([], {month: 'short', day: 'numeric'});
+                
+                row.innerHTML = `
+                    <td data-label="Account ID">
+                        <span class="account-id">#${acc.id.toString().padStart(4, '0')}</span>
+                    </td>
+                    <td data-label="Account Holder">
+                        <span class="account-name">${acc.name}</span>
+                    </td>
+                    <td data-label="Current Balance">
+                        <span class="balance ${acc.balance >= 0 ? 'positive' : ''}">
+                            $${acc.balance.toFixed(2)}
+                        </span>
+                    </td>
+                    <td data-label="Deposit Funds" class="transaction-cell">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="number" 
+                                   class="transaction-input" 
+                                   placeholder="Amount" 
+                                   min="0.01" 
+                                   step="0.01"
+                                   id="deposit-${acc.id}">
+                            <button class="btn-action btn-deposit" onclick="deposit(${acc.id})">
+                                <i class="fas fa-arrow-down"></i>
+                                Deposit
+                            </button>
+                        </div>
+                    </td>
+                    <td data-label="Withdraw Funds" class="transaction-cell">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="number" 
+                                   class="transaction-input" 
+                                   placeholder="Amount" 
+                                   min="0.01" 
+                                   step="0.01"
+                                   id="withdraw-${acc.id}">
+                            <button class="btn-action btn-withdraw" onclick="withdraw(${acc.id})">
+                                <i class="fas fa-arrow-up"></i>
+                                Withdraw
+                            </button>
+                        </div>
+                    </td>
+                    <td data-label="Last Activity">
+                        <span class="last-updated-cell">
+                            <i class="far fa-clock"></i>
+                            ${dateString} at ${timeString}
+                        </span>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Create account
+        document.getElementById("createForm").addEventListener("submit", async e => {
+            e.preventDefault();
+            const name = document.getElementById("name").value.trim();
+            const balance = parseFloat(document.getElementById("balance").value);
+            
+            if (!name) {
+                showNotification("Please enter a valid name", "error");
+                return;
+            }
+            
+            if (isNaN(balance) || balance < 0) {
+                showNotification("Please enter a valid initial balance", "error");
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('.btn-submit');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`${apiUrl}/create?name=${encodeURIComponent(name)}&balance=${balance}`, { 
+                    method: "POST" 
+                });
+                
+                if (!response.ok) throw new Error('Create failed');
+                
+                showNotification(`Account created successfully for ${name}`, "success");
+                await fetchAccounts();
+                e.target.reset();
+            } catch (error) {
+                console.error('Error creating account:', error);
+                showNotification("Failed to create account. Please try again.", "error");
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Deposit funds
+        async function deposit(id) {
+            const input = document.getElementById(`deposit-${id}`);
+            const amount = parseFloat(input.value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                showNotification("Please enter a valid deposit amount", "error");
+                input.focus();
+                return;
+            }
+            
+            // Optimistic update
+            const accountIndex = accountsCache.findIndex(acc => acc.id === id);
+            if (accountIndex !== -1) {
+                accountsCache[accountIndex].balance += amount;
+                renderAccounts(accountsCache);
+                updateStats(accountsCache);
+                transactionCount++;
+            }
+            
+            try {
+                const response = await fetch(`${apiUrl}/deposit?id=${id}&amount=${amount}`, { 
+                    method: "POST" 
+                });
+                
+                if (!response.ok) throw new Error('Deposit failed');
+                
+                showNotification(`Successfully deposited $${amount.toFixed(2)}`, "success");
+                input.value = "";
+                await fetchAccounts();
+            } catch (error) {
+                console.error('Deposit error:', error);
+                showNotification("Deposit failed. Please try again.", "error");
+                await fetchAccounts();
+            }
+        }
+
+        // Withdraw funds
+        async function withdraw(id) {
+            const input = document.getElementById(`withdraw-${id}`);
+            const amount = parseFloat(input.value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                showNotification("Please enter a valid withdrawal amount", "error");
+                input.focus();
+                return;
+            }
+            
+            // Check balance
+            const account = accountsCache.find(acc => acc.id === id);
+            if (account && account.balance < amount) {
+                showNotification("Insufficient funds for this withdrawal", "error");
+                return;
+            }
+            
+            // Optimistic update
+            const accountIndex = accountsCache.findIndex(acc => acc.id === id);
+            if (accountIndex !== -1) {
+                accountsCache[accountIndex].balance -= amount;
+                renderAccounts(accountsCache);
+                updateStats(accountsCache);
+                transactionCount++;
+            }
+            
+            try {
+                const response = await fetch(`${apiUrl}/withdraw?id=${id}&amount=${amount}`, { 
+                    method: "POST" 
+                });
+                
+                if (!response.ok) throw new Error('Withdrawal failed');
+                
+                showNotification(`Successfully withdrew $${amount.toFixed(2)}`, "success");
+                input.value = "";
+                await fetchAccounts();
+            } catch (error) {
+                console.error('Withdrawal error:', error);
+                showNotification("Withdrawal failed. Please try again.", "error");
+                await fetchAccounts();
+            }
+        }
+
+        // Manual refresh
+        async function manualRefresh() {
+            const refreshBtn = document.querySelector('.btn-primary');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<span class="spinner"></span> Refreshing...';
+            
+            await fetchAccounts();
+            
+            refreshBtn.innerHTML = originalText;
+            showNotification("Accounts refreshed successfully", "success");
+        }
+
+        // Auto-refresh toggle
+        document.getElementById('autoRefresh').addEventListener('change', function(e) {
+            if (e.target.checked) {
+                startAutoRefresh();
+                showNotification("Auto-refresh enabled", "info");
+            } else {
+                stopAutoRefresh();
+                showNotification("Auto-refresh disabled", "info");
+            }
+        });
+
+        // Start auto-refresh
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(async () => {
+                await fetchAccounts();
+            }, 5000);
+        }
+
+        // Stop auto-refresh
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initial load with slight delay for better UX
+            setTimeout(async () => {
+                await fetchAccounts();
+                updateTimestamp();
+                startAutoRefresh();
+            }, 500);
+        });
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                fetchAccounts();
+            }
+        });
+
+        // Handle online/offline events
+        window.addEventListener('online', () => {
+            updateConnectionStatus(true);
+            fetchAccounts();
+        });
+
+        window.addEventListener('offline', () => {
+            updateConnectionStatus(false);
+        });
+    </script>
+</body>
+</html>

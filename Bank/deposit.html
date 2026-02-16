@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deposit Money</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Deposit</h1>
+<nav>
+    <a href="accounts.html">Accounts</a>
+    <a href="create.html">Create Account</a>
+    <a href="withdraw.html">Withdraw</a>
+</nav>
+
+<form id="depositForm">
+    Account ID: <input type="number" id="depositId" required>
+    Amount: <input type="number" id="depositAmount" required>
+    <button type="submit">Deposit</button>
+</form>
+
+<script src="script.js"></script>
+<script>
+document.getElementById("depositForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    deposit(parseInt(document.getElementById("depositId").value), parseFloat(document.getElementById("depositAmount").value));
+    alert("Deposit successful!");
+    this.reset();
+});
+</script>
+</body>
+</html>

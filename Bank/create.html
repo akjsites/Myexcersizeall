@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Create New Account</h1>
+<nav>
+    <a href="accounts.html">Accounts</a>
+    <a href="deposit.html">Deposit</a>
+    <a href="withdraw.html">Withdraw</a>
+</nav>
+
+<form id="createForm">
+    Name: <input type="text" id="name" required>
+    Initial Balance: <input type="number" id="balance" required>
+    <button type="submit">Create</button>
+</form>
+
+<script src="script.js"></script>
+<script>
+document.getElementById("createForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    createAccount(document.getElementById("name").value, parseFloat(document.getElementById("balance").value));
+    alert("Account created!");
+    this.reset();
+});
+</script>
+</body>
+</html>

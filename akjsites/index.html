@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mini YouTube</title>
+</head>
+<body>
+<h2>Register / Login</h2>
+<input placeholder="Username" id="username"><br>
+<input placeholder="Password" type="password" id="password"><br>
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+<p id="tokenDisplay"></p>
+
+<h2>Upload Video</h2>
+<input type="text" id="title" placeholder="Video title"><br>
+<input type="file" id="videoFile" accept="video/*"><br>
+<button onclick="uploadVideo()">Upload</button>
+<p id="status"></p>
+
+<h2>Play Video</h2>
+<input type="text" id="videoName" placeholder="Filename"><br>
+<button onclick="playVideo()">Play</button>
+<video id="player" controls width="600"></video>
+
+<script>
+let token = "";
+
+function register(){
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    fetch("/auth/register?username="+username+"&password="+password+"&email=test@test.com",{method:"POST"})
+    .then(res=>res.text()).then(alert);
+}
+
+function login(){
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    fetch("/auth/login?username="+username+"&password="+password,{method:"POST"})
+    .then(res=>res.text()).then(t=>{
+        token=t;
+        document.getElementById("tokenDisplay").innerText="JWT: "+token;
+    });
+}
+
+function uploadVideo(){
+    const file=document.getElementById("videoFile").files[0];
+    const title=document.getElementById("title").value;
+    if(!file) return alert("Select file");
+    const formData=new FormData();
+    formData.append("file",file);
+    formData.append("title",title);
+    fetch("/videos/upload",{method:"POST",body:formData,headers:{"Authorization":"Bearer "+token}})
+    .then(res=>res.text()).then(msg=>document.getElementById("status").innerText=msg);
+}
+
+function playVideo(){
+    const name=document.getElementById("videoName").value;
+    document.getElementById("player").src="/videos/"+name;
+    document.getElementById("player").load();
+    document.getElementById("player").play();
+}
+</script>
+</body>
+</html>
