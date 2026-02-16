@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="factory" class="com.example.demo.factory" autowire="byName">
+   <constructor-arg name="factoryName" value="Ab"></constructor-arg>
+   <constructor-arg  ref="car"></constructor-arg>
+    </bean>
+    
+    <bean id="car" class="com.example.demo.car" >
+    <constructor-arg name="carName" value="RollRoyce"></constructor-arg>
+    <constructor-arg name="carId" value="00100"></constructor-arg>
+    <constructor-arg name="mdate" value="7/10/2004"></constructor-arg>
+    <constructor-arg name="date" value="#{T(java.time.LocalDate).now()}"></constructor-arg>
+    </bean>
+    <bean id="car1" class="com.example.demo.car" >
+    <constructor-arg name="carName" value="RollRoyce"></constructor-arg>
+    <constructor-arg name="carId" value="00100"></constructor-arg>
+    <constructor-arg name="mdate" value="7/10/2004"></constructor-arg>
+    <constructor-arg name="date" value="#{T(java.time.LocalDate).now()}"></constructor-arg>
+    </bean>
+</beans>

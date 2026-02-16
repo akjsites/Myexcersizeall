@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+     <bean id="online" class="com.example.OnlineStore.onlinestore" ></bean>
+    <bean id="factory" class="com.example.OnlineStore.productmain" >
+     <constructor-arg value="1021"></constructor-arg>
+     <constructor-arg value="Amul"></constructor-arg>
+     <constructor-arg value="Haldigram"></constructor-arg>
+   </bean>
+</beans>
