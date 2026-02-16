@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="fa" class="com.example.demo.factory">
+    <property name="Categories">
+    <array>
+    <value>Brand</value>
+    <value>low</value>
+    <value>Middium</value>
+    </array>
+    </property>
+    
+    <property name="products">
+    <list>
+    <value>Poisen</value>
+    <value>Biscute</value>
+ 
+    </list>
+    </property>
+    
+    <property name="CategoryProduct">
+    <map>
+    <entry key="p1" value="Amul"></entry>
+    <entry key="p2" value="Horlics"></entry>
+    <entry key="p3" value="MIxture"></entry>
+    
+    </map>
+    </property>
+    
+    </bean>
+    
+</beans>
