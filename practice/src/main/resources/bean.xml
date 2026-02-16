@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+     
+    <bean id="manager" class="com.example.practice.com.example.practice.setterInjection$Field.manager">
+    <constructor-arg value="Aswini"></constructor-arg>
+    <constructor-arg value="1222"></constructor-arg>
+    <constructor-arg value="30000.0"></constructor-arg>
+    </bean>
+
+     <bean id="a" class="com.example.practice.com.example.practice.setterInjection$Field.appConfig" autowire="byName">
+     
+     </bean>
+</beans>
